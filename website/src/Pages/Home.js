@@ -1,13 +1,25 @@
-import React from "react";
-import BackgroundImage from "../Assets/img/banner/s_slider_bg.jpg";
-import BackgroundImage2 from "../Assets/img/bg/ucm_bg02.jpg";
-import PosterImage from "../Assets/img/poster/s_ucm_poster01.jpg";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import BackgroundImage2 from "../Assets/img/bg/ucm_bg02.jpg";
+import axiosInstance from "../Config/axios";
+import moment from "moment";
 
 const Home = () => {
+	const [movies, setMovies] = useState([]);
+
+	const getMovies = async () => {
+		try {
+			const res = await axiosInstance.get("/movies");
+			setMovies(res.data.data);
+		} catch (error) {}
+	};
+
+	useEffect(() => {
+		getMovies();
+	}, []);
+
 	return (
 		<main>
-			{/* up-coming-movie-area */}
 			<section
 				className="ucm-area ucm-bg2"
 				style={{
@@ -24,36 +36,30 @@ const Home = () => {
 					</div>
 					<div className="ucm-active-two">
 						<div className="row">
-							{[...Array(8)].map((item, index) => {
+							{movies.map((item, index) => {
 								return (
-									<div className="col-lg-3">
-										<div className="movie-item movie-item-two mb-30" key={index}>
+									<div className="col-xl-3 col-lg-4 col-sm-6 grid-item grid-sizer cat-two" key={index}>
+										<div className="movie-item mb-60">
 											<div className="movie-poster">
-												<Link to="/movie/detail/1" className="d-block">
-													<img src={PosterImage} className="w-100 h-100" alt="" />
+												<Link to={`/movie/detail/${item._id}`}>
+													<img src={item.poster_path} alt="" />
 												</Link>
 											</div>
 											<div className="movie-content">
-												<div className="rating">
-													<i className="fas fa-star" />
-													<i className="fas fa-star" />
-													<i className="fas fa-star" />
-													<i className="fas fa-star" />
-													<i className="fas fa-star" />
+												<div className="top">
+													<h5 className="title">{item.title}</h5>
 												</div>
-												<h5 className="title">
-													<Link to="/movie/detail/1">Message in a Bottle</Link>
-												</h5>
-												<span className="rel">Adventure</span>
-												<div className="movie-content-bottom">
+												<div className="bottom">
 													<ul>
-														<li className="tag">
-															<a href="#">HD</a>
-															<a href="#">English</a>
+														<li>
+															<span className="quality">{item.genres[0]}</span>
 														</li>
 														<li>
-															<span className="like">
-																<i className="fas fa-thumbs-up" /> 3.5
+															<span className="rating">
+																<i className="fas fa-calendar-alt"></i> {moment(item.release_date).format("YYYY")}
+															</span>
+															<span className="rating">
+																<i className="fas fa-thumbs-up"></i> {item.rating}
 															</span>
 														</li>
 													</ul>
@@ -63,6 +69,11 @@ const Home = () => {
 									</div>
 								);
 							})}
+						</div>
+						<div className="text-center">
+							<Link to={"/movies"} className="btn btn-primary">
+								View All
+							</Link>
 						</div>
 					</div>
 				</div>

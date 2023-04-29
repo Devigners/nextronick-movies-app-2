@@ -1,12 +1,12 @@
 import React from "react";
-import MainLayout from "../Layouts/MainLayout";
 import { Route, Routes } from "react-router-dom";
-import Login from "../Pages/Login";
-import Home from "../Pages/Home";
-import Register from "../Pages/Register";
-import Movies from "../Pages/Movies";
-import MovieDetail from "../Pages/MovieDetail";
+import MainLayout from "../Layouts/MainLayout";
 import Dashboard from "../Pages/Dashboard";
+import Home from "../Pages/Home";
+import Login from "../Pages/Login";
+import MovieDetail from "../Pages/MovieDetail";
+import Movies from "../Pages/Movies";
+import Register from "../Pages/Register";
 
 const AppRoutes = () => {
 	return (

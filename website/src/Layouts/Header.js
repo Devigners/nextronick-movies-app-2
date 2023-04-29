@@ -1,8 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "./../Assets/img/logo/logo.png";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+	const [searchText, setSearchText] = useState("");
+	const navigate = useNavigate();
+	const { isAuth } = useSelector((s) => s.auth);
+
+	const onSubmit = (e) => {
+		e.preventDefault();
+		if (searchText) {
+			navigate(`/movies?search=${searchText}`);
+		} else {
+			navigate(`/movies`);
+		}
+	};
+
+	useEffect(() => {
+		return () => {
+			setSearchText("");
+		};
+	}, []);
+
 	return (
 		<header className="header-style-two">
 			<div id="sticky-header" className="menu-area">
@@ -33,70 +53,36 @@ const Header = () => {
 										<ul>
 											<li className="d-none d-xl-block w-100">
 												<div className="footer-search">
-													<form action="#">
-														<input type="text" placeholder="Find Favorite Movie" />
+													<form action="#" onSubmit={onSubmit}>
+														<input
+															type="text"
+															placeholder="Find Favorite Movie"
+															value={searchText}
+															onChange={(e) => setSearchText(e.target.value)}
+														/>
 														<button>
 															<i className="fas fa-search" />
 														</button>
 													</form>
 												</div>
 											</li>
-											<li className="header-btn">
-												<Link to="/login" className="btn">
-													Sign In
-												</Link>
-											</li>
+											{isAuth ? (
+												<li className="header-btn">
+													<Link to="/dashboard" className="btn">
+														Dashboard
+													</Link>
+												</li>
+											) : (
+												<li className="header-btn">
+													<Link to="/login" className="btn">
+														Sign In
+													</Link>
+												</li>
+											)}
 										</ul>
 									</div>
 								</nav>
 							</div>
-							{/* Mobile Menu  */}
-							<div className="mobile-menu">
-								<div className="close-btn">
-									<i className="fas fa-times" />
-								</div>
-								<nav className="menu-box">
-									<div className="nav-logo">
-										<a href="index-2.html">
-											<img src="img/logo/logo.png" alt="" title="" />
-										</a>
-									</div>
-									<div className="menu-outer">
-										{/*Here Menu Will Come Automatically Via Javascript / Same Menu as in Header*/}
-									</div>
-									<div className="social-links">
-										<ul className="clearfix">
-											<li>
-												<a href="#">
-													<span className="fab fa-twitter" />
-												</a>
-											</li>
-											<li>
-												<a href="#">
-													<span className="fab fa-facebook-square" />
-												</a>
-											</li>
-											<li>
-												<a href="#">
-													<span className="fab fa-pinterest-p" />
-												</a>
-											</li>
-											<li>
-												<a href="#">
-													<span className="fab fa-instagram" />
-												</a>
-											</li>
-											<li>
-												<a href="#">
-													<span className="fab fa-youtube" />
-												</a>
-											</li>
-										</ul>
-									</div>
-								</nav>
-							</div>
-							<div className="menu-backdrop" />
-							{/* End Mobile Menu */}
 						</div>
 					</div>
 				</div>

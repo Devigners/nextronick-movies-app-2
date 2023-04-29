@@ -1,5 +1,7 @@
 {
 	"scripts": {
-		"client": "cd client && npm start"
+		"website": "cd website && npm start",
+		"server": "cd server && node app.js",
+		"install": "cd website && npm install && cd .. && cd server && npm install"
 	}
 }

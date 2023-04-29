@@ -6,7 +6,6 @@
 
 }
 
-
 /* Extra large devices (large desktops, 1800px and up) */
 @media (max-width: 1500px) {
 .custom-container {
@@ -20,7 +19,7 @@
     max-width: 100%;
 }
 .breadcrumb-bg {
-    padding: 230px 0 170px;
+    padding: 120px 0;
 }
 .header-style-two::after {
     display: none;
