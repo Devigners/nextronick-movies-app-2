@@ -168,7 +168,7 @@ const Movies = () => {
 											onPageChange={handlePageClick}
 											pageRangeDisplayed={5}
 											initialPage={0}
-											pageCount={totalMovies}
+											pageCount={totalMovies / 8}
 											activeClassName="active"
 											previousLabel="Prev"
 											renderOnZeroPageCount={null}

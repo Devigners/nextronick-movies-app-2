@@ -37,8 +37,8 @@ const MovieDetail = () => {
 	useEffect(() => {
 		if (movie) {
 			if (movie.comments.length !== 0) {
-				const movieReviewRating = movie.comments.reduce((acc, comment) => acc + comment.rating, 0) / 5;
-				setUserReviewRating(Math.round(movieReviewRating));
+				const movieReviewRating = movie.comments.reduce((acc, comment) => acc + comment.rating, 0);
+				setUserReviewRating((movieReviewRating / (movie.comments.length * 5)) * 5);
 			}
 		}
 	}, [movie]);
@@ -72,7 +72,6 @@ const MovieDetail = () => {
 					if (res.status === 200) {
 						toast.success("Review Updated Successfully");
 						setMovie(res.data.data);
-						setShowReview(false);
 					}
 				} else {
 					const res = await axiosInstance.post(`movies/${id}/comments`, {
@@ -83,11 +82,21 @@ const MovieDetail = () => {
 					if (res.status === 200) {
 						toast.success("Review Added Successfully");
 						setMovie(res.data.data);
-						setShowReview(false);
 					}
 				}
+				setShowReview(false);
+				setReviewId("");
+				setReviewText("");
+				setReviewRating(0);
 			}
-		} catch (error) {}
+		} catch (error) {
+			const { data } = error.response;
+			toast.error(data.message || "Something went wrong");
+			setShowReview(false);
+			setReviewId("");
+			setReviewText("");
+			setReviewRating(0);
+		}
 	};
 
 	const handleEditReview = (review) => {
@@ -258,7 +267,7 @@ const MovieDetail = () => {
 												<li key={index}>
 													<div className="single-comment w-100">
 														<div className="comment-text w-100">
-															<div className="comment-avatar-info">
+															<div className="comment-avatar-info mb-1">
 																<h5>
 																	{`${item.userId?.first_name} ${item.userId?.last_name}`}{" "}
 																	<span className="comment-date">{moment(item.createdAt).fromNow()}</span>{" "}
@@ -273,7 +282,16 @@ const MovieDetail = () => {
 																	</a>
 																)}
 															</div>
-															<p className="w-100">{item.text}</p>
+															<StarRatings
+																rating={item.rating}
+																starRatedColor="#e4d804"
+																numberOfStars={5}
+																starSpacing="0px"
+																starHoverColor="#e4d804"
+																name="rating"
+																starDimension="15px"
+															/>
+															<p className="w-100 mt-3">{item.text}</p>
 														</div>
 													</div>
 												</li>
